@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Balances</h2>
+<ul class="list-group">
+    {% for b in balances %}
+    <li class="list-group-item d-flex justify-content-between">
+        <span>{{ b.name }}</span>
+        <span class="{{ 'text-success' if b.balance > 0 else 'text-danger' }}">
+            {{ '+$' if b.balance > 0 else '-$' }}{{ "%.2f"|format(b.balance|abs) }}
+        </span>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

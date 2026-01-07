@@ -1,0 +1,24 @@
+DROP TABLE IF EXISTS expense_splits;
+DROP TABLE IF EXISTS expenses;
+DROP TABLE IF EXISTS roommates;
+
+CREATE TABLE roommates (
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE expenses (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    payer_id INTEGER NOT NULL REFERENCES roommates(id) ON DELETE CASCADE,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    bill_photo TEXT
+);
+
+CREATE TABLE expense_splits (
+    id SERIAL PRIMARY KEY,
+    expense_id INTEGER NOT NULL REFERENCES expenses(id) ON DELETE CASCADE,
+    roommate_id INTEGER NOT NULL REFERENCES roommates(id) ON DELETE CASCADE,
+    share DECIMAL(10, 2) NOT NULL
+);

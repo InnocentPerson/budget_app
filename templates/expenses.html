@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Expenses</h2>
+<table class="table">
+    <thead><tr><th>Date</th><th>Item</th><th>Amount</th><th>Payer</th><th>Photo</th></tr></thead>
+    <tbody>
+        {% for e in expenses %}
+        <tr>
+            <td>{{ e.date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ e.name }}</td>
+            <td>${{ e.amount }}</td>
+            <td>{{ e.payer_name }}</td>
+            <td>
+                {% if e.bill_photo %}
+                <a href="{{ url_for('static', filename='uploads/' + e.bill_photo) }}" target="_blank">View</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="card p-3 mt-4 bg-light">
+    <h4>Add New Expense</h4>
+    <form action="/add_expense" method="post" enctype="multipart/form-data">
+        <div class="mb-2">
+            <input type="text" name="name" placeholder="Expense Name" class="form-control" required>
+        </div>
+        <div class="mb-2">
+            <input type="number" step="0.01" name="amount" placeholder="Amount" class="form-control" required>
+        </div>
+        
+        <div class="mb-2">
+            <label class="form-label">Who paid?</label>
+            <select name="payer" class="form-select" required>
+                <option value="" disabled selected>Select a name...</option>
+                {% for r in roommates %}
+                    <option value="{{ r.id }}">{{ r.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-2">
+            <input type="file" name="bill_photo" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Expense</button>
+    </form>
+</div>
+{% endblock %}
